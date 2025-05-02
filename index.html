@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luxury Men's Accessories</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<body>
+
+    <!-- Header Section -->
+    <header>
+        <div class="container">
+            <div class="logo">
+                <h1>Luxury Men's Accessories</h1>
+            </div>
+            <nav>
+                <ul><li><a href="home.html"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="Shop.html"><i class="fas fa-shopping-cart"></i> Shop</a></li>
+                <li><a href="About.html"><i class="fas fa-info-circle"></i> About</a></li>
+                <li><a href="Contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
+                <li><a href="Cart.html"><i class="fas fa-shopping-bag"></i>Cart</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="overlay"></div>
+        <div class="container hero-content">
+            <h2>Refined Elegance for the Modern Man</h2>
+            <p>Discover our exclusive collection of premium accessories designed for men who value quality and style.</p>
+            <a href="Shop.html" class="cta-button">Explore Collection</a>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section class="products">
+        <div class="container">
+            <h2>Featured Products</h2>
+            <div class="product-grid">
+                <div class="product">
+                    <img src="Images/luxury-classic-analog-men-s-wrist-golden-silver-watches-white-background-3d-rendering_476612-5729.jpg" alt="Luxury Watch">
+                    <div class="product-info">
+                        <h3>Luxury Watch</h3>
+                        <p>$199.99</p>
+                    </div>
+                </div>
+                <div class="product">
+                    <img src="Images/photo-insert-leather-coin-wallet-tan-card-out_900x.jpg" alt="Leather Wallet">
+                    <div class="product-info">
+                        <h3>Leather Wallet</h3>
+                        <p>$89.99</p>
+                    </div>
+                </div>
+                <div class="product">
+                    <img src="Images/CATERSIDE-Punk-Rectangle-Sunglasses-Men-Women-Luxury-Designer-Rimless-Gradient-Lens-Metal-Sun-Glasses-For-Men.jpg" alt="Designer Sunglasses">
+                    <div class="product-info">
+                        <h3>Designer Sunglasses</h3>
+                        <p>$149.99</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Luxury Men's Accessories. All rights reserved.</p>
+            <div class="social"><a href="https://www.instagram.com/accessories_25_8/" target="_blank">Instagram</a>
+            <a href="https://www.facebook.com/votre_nom_utilisateur" target="_blank">Facebook</a>
+
+        </div>
+        <div class="language-selection">
+            <label for="language-selector">Change Language:</label>
+            <select id="language-selector" onchange="changeLanguage()">
+                <option value="en">English</option>
+                <option value="fr">Français</option>
+                <option value="Tn">Tounsi</option>
+                <!-- Add more languages as needed -->
+            </select>
+        </div>
+        </div>
+    </footer>
+<script>
+        function changeLanguage() {
+            const languageSelector = document.getElementById('language-selector');
+            const selectedLanguage = languageSelector.value;
+
+            // Redirect to the corresponding language page
+            if (selectedLanguage === 'fr') {
+                window.location.href = 'fr/home.html'; // Example for French home page
+            } else if (selectedLanguage === 'Tn') {
+                window.location.href = 'Tn-index.html'; // Example for tunisian home page
+            } else {
+                window.location.href = 'index.html'; // Default to English
+            }
+        }
+    </script>
+</body>
+</html>
