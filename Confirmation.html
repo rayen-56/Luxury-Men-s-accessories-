@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmation - Luxury Men's Accessories</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://smtpjs.com/v3/smtp.js"></script>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        header { background-color: #333; color: white; padding: 20px 0; text-align: center; }
+        header .logo h1 { margin: 0; font-size: 2rem; letter-spacing: 2px; }
+        .container { width: 90%; max-width: 1200px; margin: 0 auto; padding: 20px; background-color: white; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); border-radius: 10px; }
+        .confirmation h2 { text-align: center; font-size: 2rem; margin-bottom: 20px; }
+        .confirmation p { text-align: center; font-size: 1.1rem; margin-bottom: 40px; }
+        .user-details, .cart-summary { margin-bottom: 30px; }
+        .user-details h3, .cart-summary h3 { font-size: 1.5rem; margin-bottom: 15px; border-bottom: 2px solid #333; padding-bottom: 5px; }
+        .cart-item { border-bottom: 1px solid #ddd; padding: 10px 0; }
+        .cart-item p { margin: 5px 0; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <h1>Luxury Men's Accessories</h1>
+            </div>
+        </div>
+    </header>
+
+    <section class="confirmation">
+        <div class="container">
+            <h2>Thank You for Your Purchase!</h2>
+            <p>Your order has been received. You will receive a confirmation email shortly.</p>
+
+            <div class="user-details">
+                <h3>Order Details:</h3>
+                <p id="user-info"></p>
+            </div>
+
+            <div class="cart-summary">
+                <h3>Your Ordered Items:</h3>
+                <div id="cart-items"></div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Retrieve user details from localStorage
+            const checkoutDetails = JSON.parse(localStorage.getItem('checkoutDetails')) || {
+                firstName: 'John', lastName: 'Doe', phone: '123-456-7890', email: 'user@example.com', address: '123 Luxury St.'
+            };
+            const cart = JSON.parse(localStorage.getItem('checkoutCart')) || [
+                { name: 'Luxury Watch', price: 99.99, quantity: 1 },
+                { name: 'Premium Cufflinks', price: 29.99, quantity: 2 }
+            ];
+
+            // Display user details
+            const userInfo = `
+                <p><strong>Name:</strong> ${checkoutDetails.firstName} ${checkoutDetails.lastName}</p>
+                <p><strong>Phone:</strong> ${checkoutDetails.phone}</p>
+                <p><strong>Email:</strong> ${checkoutDetails.email}</p>
+                <p><strong>Address:</strong> ${checkoutDetails.address}</p>
+            `;
+            document.getElementById('user-info').innerHTML = userInfo;
+
+            // Display cart items and calculate total
+            const cartItemsContainer = document.getElementById('cart-items');
+            let totalPrice = 0;
+            let cartContent = '';
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                totalPrice += itemTotal;
+
+                cartContent += `${item.name} - $${item.price.toFixed(2)} (Quantity: ${item.quantity})\nItem Total: $${itemTotal.toFixed(2)}\n\n`;
+
+                const cartItem = document.createElement('div');
+                cartItem.classList.add('cart-item');
+                cartItem.innerHTML = `
+                    <p><strong>${item.name}</strong> - $${item.price.toFixed(2)} (Quantity: ${item.quantity})</p>
+                    <p>Item Total: $${itemTotal.toFixed(2)}</p>
+                `;
+                cartItemsContainer.appendChild(cartItem);
+            });
+
+            const totalElement = document.createElement('p');
+            totalElement.innerHTML = `<strong>Total Price:</strong> $${totalPrice.toFixed(2)}`;
+            cartItemsContainer.appendChild(totalElement);
+
+            // Send email using SMTP.js
+            const emailBody = `
+                <h3>Order Details:</h3><pre>${userInfo}</pre>
+                <h4>Ordered Items:</h4><pre>${cartContent}</pre>
+                <h4>Total Price: $${totalPrice.toFixed(2)}</h4>
+            `;
+            Email.send({
+                SecureToken: "0a695b67-7006-408f-99f6-bc31f680ecd7", // Use the token from SMTP.js
+                To: checkoutDetails.email,          // Send to user's email
+                From: "rayanhamza047@gmail.com",     // Your email address
+                Subject: "Order Confirmation",
+                Body: emailBody
+            }).then(
+                message => console.log("Email sent successfully: " + message)
+            ).catch(
+              error => console.error("Failed to send email: " + error)
+            );
+        });
+    </script>
+</body>
+</html>

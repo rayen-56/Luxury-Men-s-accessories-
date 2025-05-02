@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .login-form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .login-form h2 {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .login-form input {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .login-form button {
+            width: 100%;
+            padding: 10px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .login-form button:hover {
+            background-color: #f0a500;
+        }
+    </style>
+</head>
+<body>
+
+<div class="login-form">
+    <h2>Admin Login</h2>
+    <input type="text" id="username" placeholder="Username">
+    <input type="password" id="password" placeholder="Password">
+    <button onclick="login()">Login</button>
+    <p id="error-message" style="color: red; display: none;">Invalid credentials</p>
+</div>
+
+<script>
+    // Hardcoded admin credentials (for simplicity)
+    const adminCredentials = {
+        username: 'admin',
+        password: 'admin123'
+    };
+
+    // Admin Login Function
+    function login() {
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+        
+        if (username === adminCredentials.username && password === adminCredentials.password) {
+            // Save login status in localStorage and redirect to admin page
+            localStorage.setItem('isAdmin', 'true');
+            window.location.href = 'product-manager.html';
+        } else {
+            document.getElementById('error-message').style.display = 'block';
+        }
+    }
+</script>
+
+</body>
+</html>

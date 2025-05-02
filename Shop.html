@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luxury Men's Accessories - Shop</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .main-content { flex: 1; }
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            margin-top: auto;
+        }
+    </style>
+</head>
+<body>
+
+<div class="main-content">
+    <header>
+        <div class="container">
+            <div class="logo">
+                <h1>Luxury Men's Accessories</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="shop.html"><i class="fas fa-shopping-cart"></i> Shop</a></li>
+                    <li><a href="about.html"><i class="fas fa-info-circle"></i> About</a></li>
+                    <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
+                    <li><a href="cart.html"><i class="fas fa-shopping-bag"></i> Cart (<span id="cart-count">0</span>)</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="shop">
+        <div class="container">
+            <h2>Shop Our Collection</h2>
+            <div class="product-grid" id="product-grid">
+                <!-- Products will be dynamically added here from localStorage -->
+            </div>
+        </div>
+    </section>
+</div>
+
+<footer>
+    <div class="container">
+        <p>&copy; 2024 Luxury Men's Accessories. All rights reserved.</p>
+        <div class="social">
+            <a href="https://www.instagram.com/accessories_25_8/">Instagram</a>
+            <a href="#">Facebook</a>
+        </div>
+    </div>
+</footer>
+
+<script>
+    function renderProducts() {
+        const productGrid = document.getElementById('product-grid');
+        productGrid.innerHTML = '';
+
+        const products = JSON.parse(localStorage.getItem('products')) || [];
+
+        if (products.length === 0) {
+            productGrid.innerHTML = '<p>No products available</p>';
+            return;
+        }
+
+        products.forEach(product => {
+            const productItem = document.createElement('div');
+            productItem.classList.add('product');
+            productItem.innerHTML = `
+                <img src="${product.image}" alt="${product.name}">
+                <div class="product-info">
+                    <h3>${product.name}</h3>
+                    <p>$${product.price}</p>
+                    <p>Description: ${product.description}</p>
+                    <p>Quantity: ${product.quantity}</p>
+                    <button class="btn" onclick="addToCart('${product.name}', '${product.image}', ${product.price})" ${product.quantity <= 0 ? 'disabled' : ''}>${product.quantity > 0 ? 'Add to Cart' : 'Out of Stock'}</button>
+                </div>
+            `;
+            productGrid.appendChild(productItem);
+        });
+    }
+
+    function addToCart(name, image, price) {
+        const products = JSON.parse(localStorage.getItem('products')) || [];
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const product = products.find(p => p.name === name);
+
+        if (product.quantity <= 0) {
+            alert('Sorry, this product is out of stock.');
+            return;
+        }
+
+        const existingProductIndex = cart.findIndex(item => item.name === name);
+        let cartProductQuantity = existingProductIndex > -1 ? cart[existingProductIndex].quantity : 0;
+
+        if (cartProductQuantity + 1 > product.quantity) {
+            alert('You cannot add more than the available stock.');
+            return;
+        }
+
+        if (existingProductIndex > -1) {
+            cart[existingProductIndex].quantity += 1;
+        } else {
+            cart.push({ name, image, price, quantity: 1 });
+        }
+
+        localStorage.setItem('cart', JSON.stringify(cart));
+        updateCartCount();
+        alert(`${name} has been added to your cart.`);
+    }
+
+    function updateCartCount() {
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const cartCount = cart.reduce((total, item) => total + item.quantity, 0);
+        document.getElementById('cart-count').innerText = cartCount;
+    }
+
+    function changeLanguage() {
+        const languageSelector = document.getElementById('language-selector');
+        const selectedLanguage = languageSelector.value;
+
+        if (selectedLanguage === 'fr') {
+            window.location.href = 'fr-Shop.html';
+        } else if (selectedLanguage === 'Tn') {
+            window.location.href = 'Tn-Shop.html';
+        } else {
+            window.location.href = 'Shop.html';
+        }
+    }
+
+    window.onload = () => {
+        renderProducts();
+        updateCartCount();
+    };
+</script>
+
+</body>
+</html>

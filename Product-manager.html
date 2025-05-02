@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Manage Products</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px; }
+        h1 { text-align: center; }
+        .section { margin-bottom: 20px; }
+        .section h2 { margin-top: 0; }
+        .contact-item, .product-item { background-color: #fff; padding: 10px; border-radius: 5px; margin-bottom: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .product-form input, .product-form textarea, .product-form button { padding: 10px; border: 1px solid #ccc; border-radius: 5px; margin-right: 10px; }
+        .product-form button { background-color: #333; color: white; }
+        .product-list .product-item { display: flex; justify-content: space-between; align-items: center; }
+        .product-list img { width: 50px; height: 50px; margin-right: 10px; }
+        .product-item button { background-color: #f00; color: white; border: none; border-radius: 5px; padding: 5px 10px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<h1>Admin Panel - Manage Products</h1>
+
+<div class="section" id="contact-messages">
+    <h2>Contact Messages</h2>
+    <div id="contact-list">
+        <!-- Contact messages will be displayed here -->
+    </div>
+</div>
+
+<div class="section product-form">
+    <h2>Add New Product</h2>
+    <input type="text" id="product-name" placeholder="Product Name" required>
+    <input type="number" id="product-price" placeholder="Product Price" required>
+    <input type="text" id="product-image" placeholder="Image Path (e.g., Images/product.jpg)" required>
+    <textarea id="product-description" placeholder="Product Description" required></textarea>
+    <input type="number" id="product-quantity" placeholder="Quantity" required>
+    <button onclick="addProduct()">Add Product</button>
+</div>
+
+<div class="section product-list" id="product-list">
+    <h2>Product List</h2>
+    <!-- Product list will be rendered here -->
+</div>
+
+<script>
+    if (localStorage.getItem('isAdmin') !== 'true') {
+        alert('You are not authorized to view this page.');
+        window.location.href = 'login.html';
+    }
+
+    function renderContactMessages() {
+        const contactList = document.getElementById('contact-list');
+        const messages = JSON.parse(localStorage.getItem('contactMessages')) || [];
+        contactList.innerHTML = '';
+
+        if (messages.length > 0) {
+            messages.forEach((msg) => {
+                const messageItem = document.createElement('div');
+                messageItem.className = 'contact-item';
+                messageItem.innerHTML = `
+                    <p><strong>Name:</strong> ${msg.name}</p>
+                    <p><strong>Instagram:</strong> ${msg.instagram}</p>
+                    <p><strong>Message:</strong> ${msg.message}</p>
+                `;
+                contactList.appendChild(messageItem);
+            });
+        } else {
+            contactList.innerHTML = '<p>No contact messages.</p>';
+        }
+    }
+
+    function renderProducts() {
+        const productList = document.getElementById('product-list');
+        productList.innerHTML = '';
+        const products = JSON.parse(localStorage.getItem('products')) || [];
+
+        products.forEach((product, index) => {
+            const productItem = document.createElement('div');
+            productItem.classList.add('product-item');
+            productItem.innerHTML = `
+                <span>${product.name} - $${product.price} - <img src="${product.image}" alt="${product.name}"> - Quantity: ${product.quantity}</span>
+                <button onclick="deleteProduct(${index})">Delete</button>
+            `;
+            productList.appendChild(productItem);
+        });
+    }
+
+    function addProduct() {
+        const name = document.getElementById('product-name').value;
+        const price = document.getElementById('product-price').value;
+        const image = document.getElementById('product-image').value;
+        const description = document.getElementById('product-description').value;
+        const quantity = document.getElementById('product-quantity').value;
+
+        if (!name || !price || !image || !description || !quantity) {
+            alert('Please fill out all fields');
+            return;
+        }
+
+        const products = JSON.parse(localStorage.getItem('products')) || [];
+        products.push({ name, price, image, description, quantity });
+        localStorage.setItem('products', JSON.stringify(products));
+
+        renderProducts();
+        document.getElementById('product-name').value = '';
+        document.getElementById('product-price').value = '';
+        document.getElementById('product-image').value = '';
+        document.getElementById('product-description').value = '';
+        document.getElementById('product-quantity').value = '';
+    }
+
+    function deleteProduct(index) {
+        const products = JSON.parse(localStorage.getItem('products')) || [];
+        products.splice(index, 1);
+        localStorage.setItem('products', JSON.stringify(products));
+        renderProducts();
+    }
+
+    window.onload = function() {
+        renderContactMessages();
+        renderProducts();
+    };
+</script>
+
+</body>
+</html>
